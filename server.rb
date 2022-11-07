@@ -2,7 +2,7 @@ require 'sinatra'
 require 'cowsay'
 
 port = ENV["PORT"] || "8080"
-configure { 
+configure {
   set :server, :puma
   set :bind, '0.0.0.0'
   set :port, port
@@ -17,3 +17,18 @@ get '/' do
 
   Cowsay.say(message, "random")
 end
+
+post '/' do
+  content_type "text/plain"
+  message = params[:message]
+  if message == nil
+    message = "Set a message by adding ?message=<message here> to the URL"
+  end
+
+  request.body.rewind  # in case someone already read it
+  clean_body = request.body.read + "\n"
+
+  File.write("foo", clean_body, mode: "a")
+  File.read("foo")
+end
+
