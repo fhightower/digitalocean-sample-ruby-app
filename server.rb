@@ -26,9 +26,9 @@ post '/' do
   end
 
   request.body.rewind  # in case someone already read it
-  clean_body = request.body.read + "\n"
+  body = request.body.read
 
-  File.write("foo", clean_body, mode: "a")
+  File.write("foo", body, mode: "a")
   File.read("foo")
 end
 
